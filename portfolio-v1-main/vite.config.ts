@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 
 export default defineConfig({
-  base: "/qs-portfolio/",
+  base: "/",
 
   plugins: [react(), tailwindcss()],
 
