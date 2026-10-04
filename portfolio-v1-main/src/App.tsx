@@ -1,39 +1,66 @@
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
-import favicon from "/favicon.ico";
+import { AnimatePresence, motion } from "framer-motion";
+import { Routes, Route } from "react-router-dom";
 
-import heroEye from "@/assets/hero-eye.png";
+import favicon from "/favicon.ico";
 
 import WelcomeScreen from "@/components/WelcomeScreen";
 import FrontendDeveloperSection from "@/components/FrontendDeveloperSection";
-import Showcase from "./components/Showcase";
 import ContactSection from "@/components/ContactSection";
-import { Routes, Route } from "react-router-dom";
 import About from "./pages/About";
 
+const techWords = [
+  "SOFTWARE ENGINEER",
+  "FULL-STACK DEVELOPMENT",
+  "WEB APPLICATIONS",
+  "DIGITAL SOLUTIONS",
+  "Q-S STUDIO",
+];
 
-const logos = ["SHAHEEL", "QUAZI", "FRONTEND", "DEVELOPER"];
+const marqueeItems = [
+  "REACT",
+  "NODE.JS",
+  "JAVA",
+  "SPRING BOOT",
+  "TYPESCRIPT",
+  "MYSQL",
+  "MONGODB",
+  "REST API",
+  "FULL-STACK",
+  "SOFTWARE ENGINEERING",
+];
 
 export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [time, setTime] = useState("");
   const [mobileMenu, setMobileMenu] = useState(false);
-
-  const text = "QS-STUDIO";
   const [displayed, setDisplayed] = useState("");
   const [colorMode, setColorMode] = useState(0);
 
+  const brandText = "Q-S STUDIO";
+
   const colors = [
-    "bg-gradient-to-b from-white via-gray-200 via-gray-500 to-black text-transparent bg-clip-text",
+    "bg-gradient-to-b from-white via-white/80 to-[#d4af37] text-transparent bg-clip-text",
     "text-white",
-    "bg-gradient-to-b from-black via-gray-500 via-gray-200 to-white text-transparent bg-clip-text",
+    "bg-gradient-to-b from-[#d4af37] via-white to-white/70 text-transparent bg-clip-text",
   ];
 
+  /* =========================================================
+     WELCOME SCREEN TIMER
+  ========================================================= */
+
   useEffect(() => {
-    const timer = setTimeout(() => setShowWelcome(false), 5000);
+    const timer = setTimeout(() => {
+      setShowWelcome(false);
+    }, 6500);
+
     return () => clearTimeout(timer);
   }, []);
+
+  /* =========================================================
+     BODY SCROLL CONTROL
+  ========================================================= */
 
   useEffect(() => {
     if (showWelcome || mobileMenu) {
@@ -47,9 +74,14 @@ export default function App() {
     };
   }, [showWelcome, mobileMenu]);
 
+  /* =========================================================
+     LIVE TIME
+  ========================================================= */
+
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
+
       setTime(
         now.toLocaleTimeString("en-US", {
           hour: "2-digit",
@@ -58,264 +90,661 @@ export default function App() {
         }),
       );
     };
+
     updateTime();
+
     const interval = setInterval(updateTime, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
+  /* =========================================================
+     BRAND TYPING ANIMATION
+  ========================================================= */
+
   useEffect(() => {
     setDisplayed("");
+
     let i = 0;
-    function type() {
-      setDisplayed(text.slice(0, i + 1));
+
+    const type = () => {
+      setDisplayed(brandText.slice(0, i + 1));
+
       i++;
-      if (i < text.length) setTimeout(type, 200);
-    }
+
+      if (i < brandText.length) {
+        setTimeout(type, 130);
+      }
+    };
+
     type();
   }, []);
 
+  /* =========================================================
+     SCROLL FUNCTION
+  ========================================================= */
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+    });
+
+    setMobileMenu(false);
+  };
+
   return (
     <Routes>
-      <Route path="/" element={
-        <div className="min-h-screen bg-black text-white overflow-x-hidden">
-          <AnimatePresence>{showWelcome && <WelcomeScreen />}</AnimatePresence>
+      {/* =====================================================
+          HOME
+      ====================================================== */}
 
-          <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-xl bg-black/20 border-b border-white/10">
-            <div className="flex items-center gap-3">
-              <img
-                src={favicon}
-                alt="Logo"
-                className="w-8 h-8 rounded-full object-cover"
-              />
+      <Route
+        path="/"
+        element={
+          <div className="min-h-screen overflow-x-hidden bg-[#05070a] text-white">
+            {/* =================================================
+                WELCOME SCREEN
+            ================================================== */}
 
-              <span className="text-[10px] md:text-xs tracking-[0.3em] text-white/70 uppercase font-medium">
-                Q·S-STUDIO
-              </span>
-            </div>
-            <ul className="hidden md:flex items-center gap-10 text-xs tracking-widest text-white/70 uppercase">
-              <li
-                onClick={() =>
-                  document.getElementById("Home")?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                }
-                className="relative hover:text-white transition-colors cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Home
-              </li>
+            <AnimatePresence>
+              {showWelcome && <WelcomeScreen />}
+            </AnimatePresence>
 
-              <li
-                onClick={() =>
-                  document.getElementById("about")?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                }
-                className="relative hover:text-white transition-colors cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
-              >
-                About
-              </li>
+            {/* =================================================
+                NAVBAR
+            ================================================== */}
 
-              <li
-                onClick={() =>
-                  document.getElementById("showcase")?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                }
-                className="relative hover:text-white transition-colors cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Showcase
-              </li>
+            <nav className="fixed left-0 right-0 top-0 z-50 border-b border-white/[0.08] bg-[#05070a]/60 px-5 py-4 backdrop-blur-2xl md:px-10 md:py-5">
+              <div className="mx-auto flex max-w-[1600px] items-center justify-between">
+                {/* BRAND */}
 
-              <li
-                onClick={() =>
-                  document.getElementById("contact")?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                }
-                className="relative hover:text-white transition-colors cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Contact
-              </li>
-            </ul>
-
-            <div className="hidden md:block text-[10px] tracking-[0.3em] text-white/70 uppercase">
-              {time}
-            </div>
-
-            <button
-              onClick={() => setMobileMenu(!mobileMenu)}
-              className="md:hidden text-white z-50"
-            >
-              {mobileMenu ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </nav>
-
-
-          {mobileMenu && (
-            <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-10 text-white uppercase tracking-[0.3em] text-sm md:hidden">
-
-              <div className="absolute top-30 text-center">
-                <p className="text-[10px] text-white/40 tracking-[0.3em] mb-2">
-                  TIME
-                </p>
-
-                <h2 className="text-2xl tracking-widest font-semibold">
-                  {time}
-                </h2>
-              </div>
-
-              <button
-                onClick={() => {
-                  document.getElementById("Home")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                  setMobileMenu(false);
-                }}
-                className="relative after:absolute after:left-0 after:-bottom-2 after:h-[1px] after:w-0 after:bg-white after:transition-all hover:after:w-full"
-              >
-                Home
-              </button>
-
-              <button
-                onClick={() => {
-                  document.getElementById("about")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                  setMobileMenu(false);
-                }}
-                className="relative after:absolute after:left-0 after:-bottom-2 after:h-[1px] after:w-0 after:bg-white after:transition-all hover:after:w-full"
-              >
-                About
-              </button>
-
-              <button
-                onClick={() => {
-                  document.getElementById("showcase")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                  setMobileMenu(false);
-                }}
-                className="relative after:absolute after:left-0 after:-bottom-2 after:h-[1px] after:w-0 after:bg-white after:transition-all hover:after:w-full"
-              >
-                Showcase
-              </button>
-
-              <button
-                onClick={() => {
-                  document.getElementById("contact")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                  setMobileMenu(false);
-                }}
-                className="relative after:absolute after:left-0 after:-bottom-2 after:h-[1px] after:w-0 after:bg-white after:transition-all hover:after:w-full"
-              >
-                Contact
-              </button>
-            </div>
-          )}
-
-          <section
-            id="Home"
-            className="relative w-full h-screen min-h-[640px] overflow-hidden bg-black"
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <img
-                src={heroEye}
-                alt="Hero"
-                className="h-[90%] w-[90%] object-contain object-center"
-              />
-            </div>
-
-            <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-10">
-              <h1
-                onClick={() => setColorMode((prev) => (prev + 1) % colors.length)}
-                className={`font-display uppercase leading-[0.85] tracking-[-0.03em] text-[22vw] md:text-[14vw] lg:text-[13rem] cursor-pointer transition-all duration-300 ${colors[colorMode]}`}
-              >
-                {displayed || "\u00A0"}
-              </h1>
-
-              <p className="md:absolute md:top-28 md:right-12
-mt-4 md:mt-0
-text-right
-text-3xl md:text-4xl lg:text-5xl
-leading-[1.05]
-max-w-md
-font-[Poppins] font-bold
-tracking-wide
-text-transparent bg-clip-text
-bg-[length:200%_auto]
-bg-gradient-to-r
-from-white via-white/60 to-white
-animate-[shine_4s_linear_infinite]">
-                Creating
-                <br />
-                Websites
-                <br />
-                That Feel
-                <br />
-                Alive.
-              </p>
-
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-auto">
-                <p className="relative text-sm sm:text-base lg:text-xl
-    leading-relaxed max-w-md
-    font-[Poppins] font-medium
-    tracking-wide
-    text-transparent bg-clip-text
-    bg-[length:200%_auto]
-    bg-gradient-to-r
-    from-white via-white/60 to-white
-    animate-[shine_4s_linear_infinite]">
-                  Turning creative ideas into interactive and{" "} <br />
-                  <em className="not-italic text-white">
-                    high-quality web experiences.
-                  </em>
-                </p>
-
-              
-              </div>
-            </div>
-          </section>
-
-          <div className="bg-black border-t border-white/10 py-5 overflow-hidden">
-            <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
-              {[...logos, ...logos, ...logos].map((logo, i) => (
-                <span
-                  key={i}
-                  className="text-white/40 text-xs tracking-[0.3em] uppercase font-medium"
+                <button
+                  onClick={() => scrollToSection("Home")}
+                  className="group flex items-center gap-3"
                 >
-                  {logo}
-                </span>
-              ))}
-            </div>
-          </div>
+                  <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-[#d4af37]/30 bg-white/[0.03]">
+                    <img
+                      src={favicon}
+                      alt="Q-S Studio"
+                      className="h-full w-full object-cover"
+                    />
 
+                    <div className="absolute inset-0 bg-[#d4af37]/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  </div>
 
-          <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.333%); }
-        }
-        .animate-marquee {
-          animation: marquee 10s linear infinite;
-        }
-      `}</style>
+                  <div className="flex flex-col items-start">
+                    <span className="text-[11px] font-bold tracking-[0.28em] text-white md:text-xs">
+                      Q-S STUDIO
+                    </span>
 
-          <section id="about">
-            <FrontendDeveloperSection />
-          </section>
-          <section id="showcase">
-            <Showcase />
-          </section>
-          <section id="contact">
-            <ContactSection />
-          </section>
-        </div>
-      } 
+                    <span className="text-[7px] uppercase tracking-[0.25em] text-[#d4af37]/70">
+                      Software Engineering
+                    </span>
+                  </div>
+                </button>
+
+                {/* DESKTOP NAV */}
+
+                <ul className="hidden items-center gap-9 text-[10px] font-medium uppercase tracking-[0.25em] text-white/50 md:flex">
+                  <li>
+                    <button
+                      onClick={() => scrollToSection("Home")}
+                      className="relative transition-colors hover:text-white"
+                    >
+                      Home
+                      <span className="absolute -bottom-2 left-0 h-px w-0 bg-[#d4af37] transition-all duration-300 group-hover:w-full" />
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      onClick={() => scrollToSection("about")}
+                      className="relative transition-colors hover:text-white"
+                    >
+                      About
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      onClick={() => scrollToSection("contact")}
+                      className="relative transition-colors hover:text-white"
+                    >
+                      Contact
+                    </button>
+                  </li>
+                </ul>
+
+                {/* DESKTOP TIME */}
+
+                <div className="hidden items-center gap-3 md:flex">
+                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d4af37]" />
+
+                  <span className="text-[9px] uppercase tracking-[0.25em] text-white/40">
+                    {time}
+                  </span>
+                </div>
+
+                {/* MOBILE MENU */}
+
+                <button
+                  onClick={() => setMobileMenu(!mobileMenu)}
+                  className="relative z-[60] flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white transition-colors hover:border-[#d4af37]/40"
+                  aria-label="Toggle menu"
+                >
+                  {mobileMenu ? (
+                    <X size={20} />
+                  ) : (
+                    <Menu size={20} />
+                  )}
+                </button>
+              </div>
+            </nav>
+
+            {/* =================================================
+                MOBILE MENU
+            ================================================== */}
+
+            <AnimatePresence>
+              {mobileMenu && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#05070a]/98 backdrop-blur-2xl md:hidden"
+                >
+                  {/* Background glow */}
+
+                  <div className="absolute left-1/2 top-1/2 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#d4af37]/5 blur-[100px]" />
+
+                  {/* Time */}
+
+                  <div className="absolute top-28 text-center">
+                    <p className="mb-2 text-[8px] uppercase tracking-[0.35em] text-white/30">
+                      Current Time
+                    </p>
+
+                    <p className="font-mono text-xl tracking-widest text-white/70">
+                      {time}
+                    </p>
+                  </div>
+
+                  {/* Menu */}
+
+                  <div className="relative flex flex-col items-center gap-9">
+                    {["Home", "About", "Contact"].map((item) => (
+                      <button
+                        key={item}
+                        onClick={() =>
+                          scrollToSection(
+                            item === "Home"
+                              ? "Home"
+                              : item.toLowerCase(),
+                          )
+                        }
+                        className="group flex items-center gap-3 text-2xl font-bold uppercase tracking-[0.15em] text-white/70 transition-colors hover:text-white"
+                      >
+                        <span>{item}</span>
+
+                        <ArrowUpRight
+                          size={18}
+                          className="text-[#d4af37] opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
+                        />
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Bottom brand */}
+
+                  <div className="absolute bottom-10 text-center">
+                    <p className="text-[9px] uppercase tracking-[0.35em] text-white/20">
+                      Q-S Studio
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* =================================================
+                HERO
+            ================================================== */}
+
+        <section
+  id="Home"
+  className="relative min-h-screen w-full overflow-hidden bg-[#05070a]"
+>
+  {/* =====================================================
+      BACKGROUND
+  ====================================================== */}
+
+  <div className="pointer-events-none absolute inset-0">
+
+    {/* Main gold glow */}
+    <div className="absolute left-[45%] top-[20%] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[#d4af37]/[0.07] blur-[160px]" />
+
+    {/* Small right glow */}
+    <div className="absolute bottom-[-150px] right-[-100px] h-[400px] w-[400px] rounded-full bg-blue-500/[0.04] blur-[140px]" />
+
+    {/* Grid */}
+    <div
+      className="absolute inset-0 opacity-[0.025]"
+      style={{
+        backgroundImage: `
+          linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
+        `,
+        backgroundSize: "60px 60px",
+      }}
     />
+
+    {/* Vignette */}
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,#05070a_88%)]" />
+  </div>
+
+
+  {/* =====================================================
+      HERO CONTENT
+  ====================================================== */}
+
+  <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1600px] flex-col px-6 pb-8 pt-28 md:px-10 md:pb-10 md:pt-32">
+
+
+    {/* =================================================
+        TOP INFORMATION
+    ================================================== */}
+
+    <div className="flex items-center justify-between">
+
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 6.6, duration: 0.8 }}
+        className="flex items-center gap-3"
+      >
+        <span className="h-px w-7 bg-[#d4af37]" />
+
+        <span className="text-[9px] uppercase tracking-[0.32em] text-white/40 md:text-[10px]">
+          Digital Engineering Studio
+        </span>
+      </motion.div>
+
+
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 6.8, duration: 0.8 }}
+        className="hidden text-[9px] tracking-[0.3em] text-white/25 md:block"
+      >
+        01 / 01
+      </motion.span>
+
+    </div>
+
+
+    {/* =================================================
+        MAIN HERO AREA
+    ================================================== */}
+
+    <div className="relative flex flex-1 flex-col justify-center">
+
+
+      {/* Small welcome label */}
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          delay: 6.9,
+          duration: 0.8,
+        }}
+        className="mb-6"
+      >
+        <span className="text-[9px] font-medium uppercase tracking-[0.4em] text-[#d4af37]">
+          Welcome to Q-S Studio
+        </span>
+      </motion.div>
+
+
+      {/* =================================================
+          MAIN BRAND
+      ================================================== */}
+
+      <div className="relative">
+
+        <motion.h1
+          onClick={() =>
+            setColorMode(
+              (prev) => (prev + 1) % colors.length
+            )
+          }
+          initial={{
+            opacity: 0,
+            y: 80,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 7,
+            duration: 1.2,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className={`
+            cursor-pointer
+            select-none
+            text-[15vw]
+            font-black
+            uppercase
+            leading-[0.75]
+            tracking-[-0.075em]
+            transition-all
+            duration-500
+
+            sm:text-[17vw]
+            md:text-[15vw]
+            lg:text-[13vw]
+            xl:text-[8rem]
+
+            ${colors[colorMode]}
+          `}
+        >
+          {displayed || "\u00A0"}
+        </motion.h1>
+
+
+        {/* Decorative line */}
+
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: "22%" }}
+          transition={{
+            delay: 7.9,
+            duration: 1,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mt-6 h-[2px] bg-[#d4af37]"
+        />
+
+      </div>
+
+
+      {/* =================================================
+          RIGHT CONTENT
+      ================================================== */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: 60,
+        }}
+        animate={{
+          opacity: 1,
+          x: 0,
+        }}
+        transition={{
+          delay: 7.5,
+          duration: 1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="
+          mt-10
+          max-w-[420px]
+
+          md:absolute
+          md:right-0
+          md:top-[38%]
+          md:mt-0
+        "
+      >
+
+        {/* Label */}
+
+        <div className="mb-4 flex items-center gap-3">
+
+          <span className="h-px w-10 bg-[#d4af37]" />
+
+          <span className="text-[9px] uppercase tracking-[0.35em] text-white/35">
+            What We Build
+          </span>
+
+        </div>
+
+
+        {/* Heading */}
+
+        <h2 className="text-[clamp(40px,5vw,72px)] font-black leading-[0.9] tracking-[-0.055em]">
+
+          <span className="text-white">
+            Digital
+          </span>
+
+          <br />
+
+          <span className="text-[#d4af37]">
+            Products.
+          </span>
+
+        </h2>
+
+
+        {/* Description */}
+
+        <p className="mt-6 max-w-[390px] text-sm leading-6 text-white/40 md:text-[15px]">
+          Modern websites and web applications engineered with
+          clean code, thoughtful design, and powerful technology.
+        </p>
+
+
+        {/* Mini stack */}
+
+        <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2">
+
+          {[
+            "React",
+            "Node.js",
+            "Java",
+            "Spring Boot",
+            "MySQL",
+          ].map((item) => (
+            <span
+              key={item}
+              className="text-[8px] uppercase tracking-[0.2em] text-white/25"
+            >
+              {item}
+            </span>
+          ))}
+
+        </div>
+
+      </motion.div>
+
+    </div>
+
+
+    {/* =================================================
+        BOTTOM CONTENT
+    ================================================== */}
+
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: 30,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      transition={{
+        delay: 8,
+        duration: 0.9,
+      }}
+      className="
+        flex
+        flex-col
+        gap-7
+
+        md:flex-row
+        md:items-end
+        md:justify-between
+      "
+    >
+
+      {/* Left text */}
+
+      <div className="max-w-[600px]">
+
+        <p className="text-sm leading-6 text-white/40 md:text-base">
+
+          Turning ideas into{" "}
+
+          <span className="text-white/80">
+            scalable digital experiences
+          </span>{" "}
+
+          for businesses, brands, and modern products.
+
+        </p>
+
+
+        {/* Categories */}
+
+        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+
+          {[
+            "Software Engineering",
+            "Full-Stack Development",
+            "Web Applications",
+            "Digital Solutions",
+          ].map((item) => (
+            <span
+              key={item}
+              className="text-[8px] uppercase tracking-[0.22em] text-white/25 md:text-[9px]"
+            >
+              {item}
+            </span>
+          ))}
+
+        </div>
+
+      </div>
+
+
+      {/* CTA */}
+
+      <button
+        onClick={() => scrollToSection("contact")}
+        className="
+          group
+          flex
+          w-fit
+          items-center
+          gap-4
+          rounded-full
+          border
+          border-[#d4af37]/40
+          bg-[#d4af37]/[0.04]
+          px-6
+          py-3.5
+          text-[9px]
+          font-medium
+          uppercase
+          tracking-[0.28em]
+          text-white/80
+          transition-all
+          duration-300
+          hover:border-[#d4af37]
+          hover:bg-[#d4af37]/10
+          hover:text-white
+        "
+      >
+
+        Start a Project
+
+        <ArrowUpRight
+          size={15}
+          className="
+            text-[#d4af37]
+            transition-transform
+            duration-300
+            group-hover:-translate-y-1
+            group-hover:translate-x-1
+          "
+        />
+
+      </button>
+
+    </motion.div>
+
+  </div>
+</section>
+            {/* =================================================
+                TECH MARQUEE
+            ================================================== */}
+
+            <div className="overflow-hidden border-y border-white/[0.07] bg-[#07090d] py-5">
+              <div className="flex w-max animate-marquee whitespace-nowrap">
+                {[...marqueeItems, ...marqueeItems].map(
+                  (item, index) => (
+                    <div
+                      key={`${item}-${index}`}
+                      className="mx-8 flex items-center gap-8"
+                    >
+                      <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/30 md:text-[10px]">
+                        {item}
+                      </span>
+
+                      <span className="h-1 w-1 rounded-full bg-[#d4af37]/50" />
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+
+            {/* =================================================
+                ABOUT / SOFTWARE ENGINEER SECTION
+            ================================================== */}
+
+            <section id="about">
+              <FrontendDeveloperSection />
+            </section>
+
+            {/* =================================================
+                CONTACT
+            ================================================== */}
+
+            <section id="contact">
+              <ContactSection />
+            </section>
+
+            {/* =================================================
+                MARQUEE CSS
+            ================================================== */}
+
+            <style>{`
+              @keyframes marquee {
+                0% {
+                  transform: translateX(0);
+                }
+
+                100% {
+                  transform: translateX(-50%);
+                }
+              }
+
+              .animate-marquee {
+                animation: marquee 25s linear infinite;
+              }
+            `}</style>
+          </div>
+        }
+      />
+
+      {/* =====================================================
+          ABOUT PAGE
+      ====================================================== */}
 
       <Route path="/about" element={<About />} />
     </Routes>
-
   );
 }

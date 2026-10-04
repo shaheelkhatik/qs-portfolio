@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { FaInstagram, FaGithub, FaYoutube, FaTelegram } from "react-icons/fa";
-
 
 export default function ContactSection() {
     const [form, setForm] = useState({
@@ -11,6 +8,7 @@ export default function ContactSection() {
     });
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [sent, setSent] = useState(false);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -21,20 +19,18 @@ export default function ContactSection() {
         }));
     };
 
+    // For now, this does NOT send to WhatsApp or Email.
     const handleSend = () => {
         if (!form.name || !form.message) return;
 
-        const text = `Hello, my name is ${form.name}%0A%0A${form.message}`;
+        setTimeout(() => {
+            setSent(true);
 
-        const phone = "91000000000";
-
-        window.open(
-            `https://wa.me/${phone}?text=${text}`,
-            "_blank"
-        );
+            setTimeout(() => {
+                setSent(false);
+            }, 3000);
+        }, 1000);
     };
-
-
 
     return (
         <section
@@ -117,9 +113,9 @@ export default function ContactSection() {
                     {/* left side */}
                     <div
                         className="flex flex-col items-center lg:items-start
-        text-center lg:text-left
-        justify-center gap-8 opacity-0
-        animate-[fadeSlideUp_0.8s_ease_0.35s_forwards]"
+                        text-center lg:text-left
+                        justify-center gap-8 opacity-0
+                        animate-[fadeSlideUp_0.8s_ease_0.35s_forwards]"
                     >
 
                         {/* heading / text */}
@@ -127,89 +123,22 @@ export default function ContactSection() {
 
                             <p
                                 className="relative text-sm sm:text-base lg:text-xl
-    leading-relaxed max-w-md
-    font-[Poppins] font-medium
-    tracking-wide
-    text-transparent bg-clip-text
-    bg-[length:200%_auto]
-    bg-gradient-to-r
-    from-white via-white/60 to-white
-    animate-[shine_4s_linear_infinite]"
+                                leading-relaxed max-w-md
+                                font-[Poppins] font-medium
+                                tracking-wide
+                                text-transparent bg-clip-text
+                                bg-[length:200%_auto]
+                                bg-gradient-to-r
+                                from-white via-white/60 to-white
+                                animate-[shine_4s_linear_infinite]"
                             >
                                 Have an idea, project, or collaboration in mind?
-                                Send me a message and let’s create something
+                                Send me a message and let's create something
                                 clean, modern, and impactful together.
                             </p>
 
                         </div>
 
-                        {/* social icons */}
-                        <div className="flex items-center justify-center lg:justify-start gap-5 mt-2">
-
-                            {/* gmail */}
-                            <a
-                                href="mailto:sprince05873@gmail.com"
-                                className="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl
-                border border-white/10
-                bg-white/[0.04]
-                backdrop-blur-xl
-                flex items-center justify-center
-                transition-all duration-300
-                hover:scale-110
-                hover:border-white/30
-                hover:bg-white/[0.08]
-                hover:shadow-[0_0_25px_rgba(255,255,255,0.12)]"
-                            >
-                                <FaEnvelope
-                                    className="text-white/80 group-hover:text-white
-                    text-[18px] sm:text-[20px]
-                    transition-all duration-300"
-                                />
-
-                                <div
-                                    className="absolute inset-0 rounded-2xl opacity-0
-                    group-hover:opacity-100 transition-opacity duration-300"
-                                    style={{
-                                        background:
-                                            "linear-gradient(135deg, rgba(255,255,255,0.08), transparent)",
-                                    }}
-                                />
-                            </a>
-
-                            {/* whatsapp */}
-                            <a
-                                href="https://wa.me/910000000000"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl
-                border border-white/10
-                bg-white/[0.04]
-                backdrop-blur-xl
-                flex items-center justify-center
-                transition-all duration-300
-                hover:scale-110
-                hover:border-green-400/40
-                hover:bg-green-500/10
-                hover:shadow-[0_0_30px_rgba(34,197,94,0.25)]"
-                            >
-                                <FaWhatsapp
-                                    className="text-white/80 group-hover:text-green-400
-                    text-[20px] sm:text-[24px]
-                    transition-all duration-300"
-                                />
-
-                                <div
-                                    className="absolute inset-0 rounded-2xl opacity-0
-                    group-hover:opacity-100 transition-opacity duration-300"
-                                    style={{
-                                        background:
-                                            "linear-gradient(135deg, rgba(34,197,94,0.08), transparent)",
-                                    }}
-                                />
-
-                                <div className="absolute inset-0 rounded-2xl border border-green-400/30 animate-ping" />
-                            </a>
-                        </div>
                     </div>
 
                     {/* contact card */}
@@ -221,7 +150,8 @@ export default function ContactSection() {
 
                         <motion.div
                             onMouseMove={(e) => {
-                                const rect = e.currentTarget.getBoundingClientRect();
+                                const rect =
+                                    e.currentTarget.getBoundingClientRect();
 
                                 setPosition({
                                     x: e.clientX - rect.left,
@@ -285,6 +215,7 @@ export default function ContactSection() {
 
                                 {/* top */}
                                 <div className="space-y-3">
+
                                     <div className="flex items-baseline gap-3">
                                         <h2 className="text-2xl font-black tracking-tight bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
                                             Send Message
@@ -296,8 +227,10 @@ export default function ContactSection() {
                                     </div>
 
                                     <p className="text-sm text-white/35 leading-relaxed">
-                                        Your message opens directly in WhatsApp—no spam, just real connection.
+                                        Send your message through the form below.
+                                        I'll get back to you soon.
                                     </p>
+
                                 </div>
 
                                 {/* form */}
@@ -362,12 +295,13 @@ export default function ContactSection() {
                                         disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <span className="relative z-10 flex items-center justify-center gap-2">
+
                                             <svg
                                                 className="w-5 h-5 transition-transform duration-300 group-hover/btn:translate-x-1"
                                                 fill="currentColor"
                                                 viewBox="0 0 24 24"
                                             >
-                                                <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.8429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 L4.13399899,1.16126562 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.837654326,3.0486314 1.15159189,3.99621575 L3.03521743,10.4371852 C3.03521743,10.5942826 3.19218622,10.75138 3.50612381,10.75138 L16.6915026,11.5368670 C16.6915026,11.5368670 17.1624089,11.5368670 17.1624089,12.0081591 C17.1624089,12.4794512 16.6915026,12.4744748 16.6915026,12.4744748 Z" />
+                                                <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.8429026 L21.714504,14.0454487 C22.6563168,13.5741565 23.1272231,12.6315722 22.9702544,11.6889879 L4.13399899,1.16126562 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.837654326,3.0486314 1.15159189,3.99621575 L3.03521743,10.4371852 C3.03521743,10.5942826 3.19218622,10.75138 3.50612381,10.75138 L16.6915026,11.5368670 C16.6915026,11.5368670 17.1624089,11.5368670 17.1624089,12.0081591 C17.1624089,12.4794512 16.6915026,12.4744748 16.6915026,12.4744748 Z" />
                                             </svg>
 
                                             Send Message
@@ -386,6 +320,13 @@ export default function ContactSection() {
                                         />
                                     </button>
 
+                                    {/* success message */}
+                                    {sent && (
+                                        <p className="text-center text-green-400 text-sm mt-3">
+                                            ✓ Your message has been received successfully!
+                                        </p>
+                                    )}
+
                                     {/* status */}
                                     <div className="flex items-center gap-2 pt-4 border-t border-white/10">
                                         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -394,6 +335,7 @@ export default function ContactSection() {
                                             Usually replies within a few hours
                                         </p>
                                     </div>
+
                                 </div>
                             </div>
                         </motion.div>
@@ -427,13 +369,14 @@ export default function ContactSection() {
                 }
 
                 @keyframes shine {
-    0% {
-        background-position: 200% center;
-    }
-    100% {
-        background-position: -200% center;
-    }
-}
+                    0% {
+                        background-position: 200% center;
+                    }
+
+                    100% {
+                        background-position: -200% center;
+                    }
+                }
 
                 @keyframes headingReveal {
                     from {
@@ -507,134 +450,6 @@ export default function ContactSection() {
                     }
                 }
             `}</style>
-            
-            {/* footer */}
-            <div className="relative z-10 mt-24 border-t border-white/10 pt-12 pb-8">
-
-                <div className="relative flex flex-col items-center gap-7">
-                    
-
-                    <h2
-                        className="text-center font-black tracking-[0.25em] uppercase
-  text-white/60 opacity-0
-  animate-[headingReveal_1s_cubic-bezier(0.22,1,0.36,1)_0.15s_forwards]"
-                        style={{
-                            fontSize: "clamp(14px,2vw,18px)",
-                        }}
-                    >
-                        <span
-                            className="inline-block bg-gradient-to-b
-    from-white via-white/70 to-white/30
-    bg-clip-text text-transparent"
-                        >
-                            Follow Me
-                        </span>
-                    </h2>
-                    
-                    <div className="flex flex-wrap items-center justify-center gap-5">
-                        {/* Instagram */}
-                        <a
-                            href="https://www.instagram.com/prince_kumar_74_"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Instagram"
-                            className="group relative grid h-14 w-14 place-items-center overflow-hidden rounded-[20px]
-    border border-white/10 bg-white/[0.05] backdrop-blur-2xl
-    shadow-[0_10px_30px_rgba(0,0,0,0.28)]
-    transition-all duration-500 ease-out
-    hover:-translate-y-1.5 hover:scale-105 hover:border-white/30"
-                        >
-                            {/* YOUR INSTAGRAM GRADIENT */}
-                            <div
-                                className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                                style={{
-                                    background:
-                                        "linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7)",
-                                }}
-                            />
-
-                            {/* inner dark glass */}
-                            <div className="absolute inset-[1px] rounded-[19px] bg-[#0b0b12]/80" />
-
-                            {/* glow */}
-                            <div className="absolute -inset-6 blur-2xl transition-all duration-500 group-hover:bg-white/10" />
-
-                            {/* icon */}
-                            <FaInstagram className="relative z-10 text-[30px] text-white transition-all duration-500 group-hover:scale-110 group-hover:text-white" />
-                        </a>
-
-                        {/* GitHub */}
-                        <a
-                            href="https://github.com/princekumar-dev74"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub"
-                            className="group relative grid h-14 w-14 place-items-center overflow-hidden rounded-[20px]
-        border border-white/10 bg-white/[0.05] backdrop-blur-2xl
-        shadow-[0_10px_30px_rgba(0,0,0,0.28)]
-        transition-all duration-500 ease-out
-        hover:-translate-y-1.5 hover:scale-105 hover:border-white/40"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/16 via-slate-300/8 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                            <div className="absolute inset-[1px] rounded-[19px] bg-[#0b0b12]/80" />
-                            <div className="absolute -inset-6 bg-white/0 blur-2xl transition-all duration-500 group-hover:bg-white/12" />
-
-                            <FaGithub className="relative z-10 text-[30px] text-white transition-all duration-500 group-hover:scale-110 group-hover:text-white" />
-                        </a>
-
-                        {/* YouTube */}
-                        <a
-                            href="https://www.youtube.com/@WebKaizenDev"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="YouTube"
-                            className="group relative grid h-14 w-14 place-items-center overflow-hidden rounded-[20px]
-        border border-white/10 bg-white/[0.05] backdrop-blur-2xl
-        shadow-[0_10px_30px_rgba(0,0,0,0.28)]
-        transition-all duration-500 ease-out
-        hover:-translate-y-1.5 hover:scale-105 hover:border-red-400/50"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-red-500/18 via-rose-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                            <div className="absolute inset-[1px] rounded-[19px] bg-[#0b0b12]/80" />
-                            <div className="absolute -inset-6 bg-red-500/0 blur-2xl transition-all duration-500 group-hover:bg-red-500/20" />
-
-                            <FaYoutube className="relative z-10 text-[30px] text-white transition-all duration-500 group-hover:scale-110 group-hover:text-red-400" />
-                        </a>
-
-                        {/* Telegram */}
-                        <a
-                            href="https://t.me/web_kaizen_official"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Telegram"
-                            className="group relative grid h-14 w-14 place-items-center overflow-hidden rounded-[20px]
-        border border-white/10 bg-white/[0.05] backdrop-blur-2xl
-        shadow-[0_10px_30px_rgba(0,0,0,0.28)]
-        transition-all duration-500 ease-out
-        hover:-translate-y-1.5 hover:scale-105 hover:border-sky-400/50"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-sky-500/18 via-cyan-400/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                            <div className="absolute inset-[1px] rounded-[19px] bg-[#0b0b12]/80" />
-                            <div className="absolute -inset-6 bg-sky-500/0 blur-2xl transition-all duration-500 group-hover:bg-sky-500/20" />
-
-                            <FaTelegram className="relative z-10 text-[30px] text-white transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400" />
-                        </a>
-                    </div>
-
-                    <div className="h-px w-32 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
-<p className="text-center text-sm tracking-[0.22em] text-white/35">
-  Copyright © {new Date().getFullYear()} All Rights Reserved | Created by{" "}
-  
-  <span className="relative inline-block text-white/70">
-    prince
-    <span className="absolute left-1/2 -translate-x-1/2 -bottom-2">
-      <div className="h-px w-24 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-    </span>
-  </span>
-</p>
-                </div>
-            </div>
         </section>
     );
 }
